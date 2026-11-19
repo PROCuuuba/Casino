@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane style="-fx-background-color: #2c3e50;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="games.threebags.GameController">
+    <padding>
+        <Insets bottom="20" left="20" right="20" top="20" />
+    </padding>
+
+    <top>
+        <VBox alignment="CENTER" spacing="10">
+            <Label style="-fx-font-size: 28px; -fx-text-fill: gold; -fx-font-weight: bold;" text="🎰 Три мешочка 🎰" />
+            <Label fx:id="balanceLabel" style="-fx-font-size: 18px; -fx-text-fill: white;" text="Баланс: 0 монет" />
+            <Label fx:id="statusLabel" style="-fx-font-size: 14px; -fx-text-fill: #bdc3c7;" text="Вставьте монету для начала игры" />
+        </VBox>
+    </top>
+
+    <center>
+        <!-- fx:id для HBox нужен, чтобы скрывать/показывать мешочки -->
+        <HBox fx:id="bagsBox" alignment="CENTER" spacing="20">
+            <!-- Обработчик клика привязан к контроллеру -->
+            <Label onMouseClicked="#onBagClicked" style="-fx-font-size: 100px; -fx-cursor: hand; -fx-padding: 10px;" text="❒" />
+            <Label onMouseClicked="#onBagClicked" style="-fx-font-size: 100px; -fx-cursor: hand; -fx-padding: 10px;" text="❒" />
+            <Label onMouseClicked="#onBagClicked" style="-fx-font-size: 100px; -fx-cursor: hand; -fx-padding: 10px;" text="❒" />
+        </HBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER" spacing="20">
+            <Button onAction="#onPay" style="-fx-font-size: 16px; -fx-background-color: #f1c40f; -fx-text-fill: #2c3e50;" text="🪙 Вставить монету" />
+            <Button onAction="#onStart" style="-fx-font-size: 16px; -fx-background-color: #2ecc71; -fx-text-fill: white;" text="▶ Начать игру" />
+        </HBox>
+    </bottom>
+</BorderPane>
