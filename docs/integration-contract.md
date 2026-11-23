@@ -26,7 +26,7 @@
 | `Larin` · `c1af16b` | `ThreeBagsAdapter.start(Stage, Runnable)` | FXML и собственная команда возврата | Адаптер реализует общий контракт. Исходная команда возврата закрывает игровое окно. |
 | `Mogilevtsev` · `aef3a88` | `SlotMachineApp.start(Stage)` | FXML, CSS и изображения | `ReelsMachine` открывает сцену исходной игры. |
 | `Putilin` · `f5c6fa4` | `ru.study.chain.Main.start(Stage)` | JavaFX из кода и PNG мешочка | `PouchMachine` подготавливает сцену в отдельном окне. |
-| `Varganov` · `7ab4593` | `BagMachineAdapter.launch()` | JavaFX из кода и графика мешочков | `BagMachineAdapter` передаёт подготовку окна исходному `GameApplication`. Дополнительная «Монета» доступна в исходной ветке. |
+| `Varganov` · `7ab4593` | `BagMachineAdapter.launch()` | JavaFX из кода и графика сундуков | `BagMachineAdapter` передаёт подготовку окна исходному `GameApplication`. Дополнительная «Монета» доступна в исходной ветке. |
 
 ## Подключение нового автомата
 
