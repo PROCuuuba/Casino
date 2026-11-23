@@ -9,19 +9,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.util.Optional;
@@ -32,7 +25,10 @@ public class GameApplication extends Application {
     private final Label coinsLabel = new Label();
     private final Label infoLabel = new Label("Добавьте монету и начните игру.");
     private final Button startButton = new Button("Начать игру");
-    private final Button[] bags = new Button[3];
+    private final Button[] chests = new Button[3];
+    private final ImageView[] chestImages = new ImageView[3];
+    private final Image closedChest = new Image(GameApplication.class.getResource("chest-closed.jfif").toExternalForm());
+    private final Image openChest = new Image(GameApplication.class.getResource("chest-open.jpg").toExternalForm());
     private boolean freeNextGame;
     private boolean gameStarted;
 
@@ -42,20 +38,20 @@ public class GameApplication extends Application {
 
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(18, 28, 24, 28));
-        root.setStyle("-fx-background-color: linear-gradient(to bottom, #fff6e7, #f1dec2);");
+        root.setStyle("-fx-background-color: linear-gradient(to bottom, #211215, #513324);");
 
-        Label gameName = new Label("ИГРОВОЙ АВТОМАТ");
-        gameName.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #80532d;");
+        Label gameName = new Label("СУНДУКИ УДАЧИ");
+        gameName.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #e5b85a;");
 
-        Label title = new Label("Выбери один из мешочков");
-        title.setStyle("-fx-font-size: 27px; -fx-font-weight: bold; -fx-text-fill: #4b2c18;");
+        Label title = new Label("Выбери один из сундуков");
+        title.setStyle("-fx-font-size: 27px; -fx-font-weight: bold; -fx-text-fill: #fff0ce;");
 
-        Label subtitle = new Label("Все мешочки одинаковые, но один из исходов может принести удачу.");
-        subtitle.setStyle("-fx-font-size: 13px; -fx-text-fill: #775d48;");
+        Label subtitle = new Label("Один из сундуков может принести монеты или бесплатную попытку.");
+        subtitle.setStyle("-fx-font-size: 13px; -fx-text-fill: #ddc4a2;");
 
-        coinsLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #6a421f;");
-        infoLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #6a5746; -fx-padding: 8 14 8 14; "
-                + "-fx-background-color: #fffaf2; -fx-background-radius: 8;");
+        coinsLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #f4c950;");
+        infoLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #f2dfc3; -fx-padding: 8 14 8 14; "
+                + "-fx-background-color: rgba(0,0,0,0.22); -fx-background-radius: 8;");
 
         Button addCoinButton = new Button("Добавить 1 монету");
         addCoinButton.setStyle("-fx-font-size: 14px; -fx-background-color: #f0b94f; -fx-font-weight: bold;");
@@ -70,119 +66,70 @@ public class GameApplication extends Application {
         top.setAlignment(Pos.CENTER);
         root.setTop(top);
 
-        HBox bagBox = new HBox(18);
-        bagBox.setAlignment(Pos.CENTER);
-        bagBox.setPadding(new Insets(28, 0, 4, 0));
-        for (int i = 0; i < bags.length; i++) {
-            Button bag = createBagButton(i + 1);
-            bag.setDisable(true);
-            bag.setOnAction(event -> chooseBag());
-            bags[i] = bag;
-            bagBox.getChildren().add(bag);
+        HBox chestBox = new HBox(18);
+        chestBox.setAlignment(Pos.CENTER);
+        chestBox.setPadding(new Insets(28, 0, 4, 0));
+        for (int i = 0; i < chests.length; i++) {
+            int index = i;
+            Button chest = createChestButton(i + 1);
+            chest.setDisable(true);
+            chest.setOnAction(event -> chooseChest(index));
+            chests[i] = chest;
+            chestBox.getChildren().add(chest);
         }
-        root.setCenter(bagBox);
+        root.setCenter(chestBox);
 
         updatePlayerInfo();
-        stage.setScene(new Scene(root, 690, 420));
+        Scene scene = new Scene(root, 690, 420);
+        ClickSound.install(scene);
+        stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
     }
-    private Button createBagButton(int number) {
-        Pane picture = createBagPicture();
+    private Button createChestButton(int number) {
+        ImageView picture = new ImageView(closedChest);
+        picture.setFitWidth(118);
+        picture.setFitHeight(96);
+        picture.setPreserveRatio(true);
+        picture.setSmooth(false);
+        chestImages[number - 1] = picture;
 
-        Label text = new Label("МЕШОЧЕК " + number + "\nВыбрать");
-        text.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #4b2c18; -fx-text-alignment: center;");
+        StackPane imageBox = new StackPane(picture);
+        imageBox.setPrefSize(126, 100);
+        Label text = new Label("СУНДУК " + number + "\nОткрыть");
+        text.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #f9df9f; -fx-text-alignment: center;");
 
-        VBox content = new VBox(0, picture, text);
+        VBox content = new VBox(2, imageBox, text);
         content.setAlignment(Pos.CENTER);
 
         Button bag = new Button();
         bag.setGraphic(content);
         bag.setPrefSize(185, 170);
         bag.setMinSize(185, 170);
-        bag.setStyle("-fx-background-color: #f8e7cc; -fx-background-radius: 16; -fx-border-radius: 16; "
-                + "-fx-border-color: #c99053; -fx-border-width: 2; -fx-cursor: hand;");
+        bag.setStyle("-fx-background-color: #35211b; -fx-background-radius: 16; -fx-border-radius: 16; "
+                + "-fx-border-color: #b9863d; -fx-border-width: 2; -fx-cursor: hand;");
         return bag;
     }
 
-    // Рисует простую фигуру мешочка из стандартных JavaFX-форм.
-    private Pane createBagPicture() {
-        Pane picture = new Pane();
-        picture.setPrefSize(135, 118);
-
-        Path body = new Path(
-                new MoveTo(47, 42),
-                new CubicCurveTo(45, 54, 26, 58, 21, 74),
-                new CubicCurveTo(17, 91, 29, 111, 31, 112),
-                new LineTo(104, 112),
-                new CubicCurveTo(106, 111, 118, 91, 114, 74),
-                new CubicCurveTo(109, 58, 90, 54, 88, 42),
-                new ClosePath()
-        );
-        body.setFill(Color.web("#cf9857"));
-        body.setStroke(Color.web("#82491f"));
-        body.setStrokeWidth(2);
-
-        Rectangle neck = new Rectangle(47, 23, 41, 22);
-        neck.setArcWidth(10);
-        neck.setArcHeight(10);
-        neck.setFill(Color.web("#d7a665"));
-        neck.setStroke(Color.web("#82491f"));
-        neck.setStrokeWidth(2);
-
-        Rectangle tie = new Rectangle(40, 40, 55, 8);
-        tie.setArcWidth(6);
-        tie.setArcHeight(6);
-        tie.setFill(Color.web("#75401c"));
-
-        Circle knot = new Circle(67, 44, 8, Color.web("#e8c176"));
-        knot.setStroke(Color.web("#75401c"));
-
-        Path leftFold = new Path(new MoveTo(42, 64), new CubicCurveTo(35, 79, 37, 91, 43, 101));
-        leftFold.setFill(Color.TRANSPARENT);
-        leftFold.setStroke(Color.web("#b6793e"));
-        leftFold.setStrokeWidth(2);
-
-        Path rightFold = new Path(new MoveTo(93, 64), new CubicCurveTo(100, 79, 98, 91, 92, 101));
-        rightFold.setFill(Color.TRANSPARENT);
-        rightFold.setStroke(Color.web("#b6793e"));
-        rightFold.setStrokeWidth(2);
-
-        StackPane coin = new StackPane();
-        coin.setLayoutX(53);
-        coin.setLayoutY(71);
-        coin.setPrefSize(28, 28);
-        coin.setStyle("-fx-background-color: #f1c94d; -fx-background-radius: 20; -fx-border-color: #a97617; "
-                + "-fx-border-radius: 20; -fx-border-width: 2;");
-        Label coinText = new Label("1");
-        coinText.setStyle("-fx-font-weight: bold; -fx-text-fill: #865b11;");
-        coin.getChildren().add(coinText);
-
-        picture.getChildren().addAll(body, neck, tie, knot, leftFold, rightFold, coin);
-        return picture;
-    }
-
-    // Добавляет игроку одну монету.
     private void addCoin() {
         player.addCoins(1);
         infoLabel.setText("Монета добавлена. Теперь можно начать игру.");
         updatePlayerInfo();
     }
 
-    // Запускает выбор мешочка.
     private void startGame() {
         if (player.getCoins() == 0) {
             showSimpleMessage("Недостаточно монет", "Сначала добавьте хотя бы одну монету.");
             return;
         }
 
+        resetChests();
         gameStarted = true;
-        infoLabel.setText("Выберите любой мешочек.");
-        updateBagButtons();
+        infoLabel.setText("Выберите любой сундук.");
+        updateChestButtons();
     }
 
-    // Обрабатывает выбор мешочка игроком.
-    private void chooseBag() {
+    private void chooseChest(int index) {
         if (!gameStarted) {
             return;
         }
@@ -193,12 +140,12 @@ public class GameApplication extends Application {
         }
 
         freeNextGame = false;
+        chestImages[index].setImage(openChest);
         GameDecision decision = actionChain.play(player);
         updatePlayerInfo();
         showDecision(decision);
     }
 
-    // Показывает результат, полученный из цепочки.
     private void showDecision(GameDecision decision) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(decision.getTitle());
@@ -222,27 +169,30 @@ public class GameApplication extends Application {
             return;
         }
 
+        resetChests();
         infoLabel.setText(freeNextGame
-                ? "Следующий выбор мешочка бесплатный."
-                : "Выберите мешочек для следующей попытки.");
-        updateBagButtons();
+                ? "Следующий сундук можно открыть бесплатно."
+                : "Выберите сундук для следующей попытки.");
+        updateChestButtons();
     }
 
     private void finishGame(String message) {
         gameStarted = false;
         freeNextGame = false;
         infoLabel.setText(message);
-        updateBagButtons();
+        updateChestButtons();
     }
 
     private void updatePlayerInfo() {
         coinsLabel.setText("Монеты: " + player.getCoins() + " | Сыграно попыток: " + player.getGamesCount());
     }
 
-    private void updateBagButtons() {
-        for (Button bag : bags) {
-            bag.setDisable(!gameStarted);
-        }
+    private void resetChests() {
+        for (ImageView chestImage : chestImages) chestImage.setImage(closedChest);
+    }
+
+    private void updateChestButtons() {
+        for (Button chest : chests) chest.setDisable(!gameStarted);
     }
 
     private void showSimpleMessage(String title, String text) {
