@@ -6,8 +6,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.Group;
 import javafx.scene.layout.BorderPane;
@@ -19,8 +17,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-
-import java.util.Optional;
+import javafx.stage.Modality;
+import javafx.stage.StageStyle;
 
 public class GameApplication extends Application {
     private final Player player = new Player("Игрок", 0);
@@ -30,11 +28,13 @@ public class GameApplication extends Application {
     private final Button startButton = new Button("Начать игру");
     private final Button[] chests = new Button[3];
     private final ChestShape[] chestShapes = new ChestShape[3];
+    private Stage gameStage;
     private boolean freeNextGame;
     private boolean gameStarted;
 
     @Override
     public void start(Stage stage) {
+        gameStage = stage;
         stage.setTitle("Сундуки удачи");
 
         BorderPane root = new BorderPane();
@@ -144,16 +144,7 @@ public class GameApplication extends Application {
     }
 
     private void showDecision(GameDecision decision) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(decision.getTitle());
-        alert.setHeaderText(decision.getMessage());
-
-        ButtonType continueButton = new ButtonType("Играть ещё", ButtonBar.ButtonData.YES);
-        ButtonType finishButton = new ButtonType("Забрать и выйти", ButtonBar.ButtonData.NO);
-        alert.getButtonTypes().setAll(continueButton, finishButton);
-
-        Optional<ButtonType> answer = alert.showAndWait();
-        boolean continueGame = answer.isPresent() && answer.get() == continueButton;
+        boolean continueGame = showDecisionDialog(decision);
 
         if (!continueGame) {
             finishGame("Игра завершена. Вы можете добавить монеты и начать заново.");
@@ -171,6 +162,54 @@ public class GameApplication extends Application {
                 ? "Следующий сундук можно открыть бесплатно."
                 : "Выберите сундук для следующей попытки.");
         updateChestButtons();
+    }
+
+    private boolean showDecisionDialog(GameDecision decision) {
+        Stage dialog = new Stage();
+        dialog.initOwner(gameStage);
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initStyle(StageStyle.UNDECORATED);
+
+        String signText = decision.getType() == ResultType.WIN ? "★" : decision.getType() == ResultType.CHANCE ? "↻" : "✕";
+        Label sign = new Label(signText);
+        sign.setStyle("-fx-font-size: 34px; -fx-font-weight: bold; -fx-text-fill: #f2c45a;");
+        Label title = new Label(decision.getTitle());
+        title.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #ffe9bd;");
+        HBox heading = new HBox(10, sign, title);
+        heading.setAlignment(Pos.CENTER);
+
+        Label message = new Label(decision.getMessage());
+        message.setWrapText(true);
+        message.setMaxWidth(350);
+        message.setAlignment(Pos.CENTER);
+        message.setStyle("-fx-font-size: 14px; -fx-text-fill: #f5d9cf; -fx-text-alignment: center;");
+
+        boolean[] result = {false};
+        Button continueButton = new Button("Играть ещё");
+        continueButton.setPrefWidth(150);
+        continueButton.setStyle("-fx-font-weight: bold; -fx-background-color: #e3ad3d; -fx-text-fill: #371014; -fx-background-radius: 8;");
+        continueButton.setOnAction(event -> {
+            result[0] = true;
+            dialog.close();
+        });
+        Button finishButton = new Button("Забрать и выйти");
+        finishButton.setPrefWidth(150);
+        finishButton.setStyle("-fx-font-weight: bold; -fx-background-color: #7d2530; -fx-text-fill: #fff0d2; -fx-border-color: #d69e42; -fx-border-radius: 8; -fx-background-radius: 8;");
+        finishButton.setOnAction(event -> dialog.close());
+
+        HBox buttons = new HBox(12, continueButton, finishButton);
+        buttons.setAlignment(Pos.CENTER);
+        VBox content = new VBox(18, heading, message, buttons);
+        content.setAlignment(Pos.CENTER);
+        content.setPadding(new Insets(26, 32, 28, 32));
+        content.setStyle("-fx-background-color: linear-gradient(to bottom, #751d29, #2b0d15); -fx-border-color: #e0ad4e; -fx-border-width: 2; -fx-border-radius: 12; -fx-background-radius: 12;");
+
+        Scene scene = new Scene(content, 410, 210);
+        ClickSound.install(scene);
+        dialog.setScene(scene);
+        dialog.setResizable(false);
+        dialog.showAndWait();
+        return result[0];
     }
 
     private void finishGame(String message) {
