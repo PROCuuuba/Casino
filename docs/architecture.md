@@ -7,6 +7,11 @@ classDiagram
     class HelloApplication
     class HelloController
     class GameCatalog
+    class BalanceManager {
+        +int getCoins()
+        +void addCoins(int)
+        +boolean spendCoins(int)
+    }
     class GameMachine {
         <<interface>>
         +String id()
@@ -24,6 +29,7 @@ classDiagram
     class GameController
     HelloApplication ..> HelloController : загружает через FXML
     HelloController --> GameCatalog
+    HelloController --> BalanceManager : показывает баланс
     HelloController ..> GameMachine : открывает выбранный
     GameCatalog o-- GameMachine : находит через ServiceLoader
     GameMachine <|.. FxGameMachine
@@ -31,9 +37,13 @@ classDiagram
     FxGameMachine <|-- ThreeBagsAdapter
     GambleMachine ..> GambleApplication
     ThreeBagsAdapter ..> GameController
+    GambleApplication --> BalanceManager
+    GameController --> BalanceManager
 ```
 
 На диаграмме показаны два адаптера. Остальные подключаются через тот же интерфейс.
+
+`BalanceManager` расположен в общем модуле API. Все модели игроков используют один экземпляр менеджера, поэтому внесённые монеты, ставки и выигрыши сохраняются при смене автомата.
 
 ## Открытие и возврат
 

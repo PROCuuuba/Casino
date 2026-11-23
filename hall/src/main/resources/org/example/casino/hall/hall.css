@@ -1,0 +1,28 @@
+.root { -fx-font-family: "Segoe UI"; -fx-background-color: #f4eee4; }
+.header { -fx-background-color: linear-gradient(to right, #2d1824, #54263b); }
+.hall-title { -fx-font-size: 25px; -fx-font-weight: bold; -fx-text-fill: #fff8e9; }
+.hall-subtitle { -fx-font-size: 12px; -fx-text-fill: #e6c9b9; }
+.balance-box { -fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10; -fx-padding: 7 13 7 13; }
+.balance-caption { -fx-font-size: 9px; -fx-text-fill: #f0d3a0; -fx-font-weight: bold; }
+.balance-value { -fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #ffe07a; }
+.music-button { -fx-background-color: transparent; -fx-border-color: #bd8b68; -fx-border-radius: 8; -fx-text-fill: #f5dfcd; -fx-font-size: 11px; -fx-padding: 7 10 7 10; }
+.content-split { -fx-background-color: #f4eee4; }
+.catalog-pane { -fx-background-color: #eadac4; }
+.games-pane { -fx-background-color: #f8f3ea; }
+.section-title { -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #633728; }
+.section-hint { -fx-font-size: 11px; -fx-text-fill: #8a7060; }
+.list-view { -fx-background-color: transparent; -fx-border-color: #cba888; -fx-border-radius: 7; -fx-background-radius: 7; }
+.list-cell { -fx-background-color: transparent; -fx-padding: 9 8 9 8; -fx-text-fill: #4e3025; -fx-font-size: 12px; }
+.list-cell:filled:selected { -fx-background-color: #9c573e; -fx-text-fill: white; }
+.main-button, .coin-button, .card-button { -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 7; }
+.main-button { -fx-background-color: #914c35; -fx-text-fill: white; }
+.coin-button { -fx-background-color: #e7ba50; -fx-text-fill: #533a17; }
+.cards-scroll, .cards-scroll > .viewport { -fx-background-color: transparent; }
+.cards { -fx-padding: 4; }
+.game-card { -fx-pref-width: 154; -fx-min-height: 172; -fx-padding: 15; -fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #ddc3a9; -fx-border-radius: 12; -fx-alignment: center; -fx-cursor: hand; }
+.selected-card { -fx-border-color: #a9583e; -fx-border-width: 2; -fx-background-color: #fff8ed; }
+.card-icon { -fx-font-size: 25px; -fx-text-fill: #e0a83f; }
+.card-title { -fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #503126; -fx-text-alignment: center; }
+.card-detail { -fx-font-size: 10px; -fx-text-fill: #8a7060; -fx-text-alignment: center; }
+.card-button { -fx-background-color: #c9793e; -fx-text-fill: white; -fx-font-size: 11px; }
+.status-bar { -fx-background-color: #e6d6c3; -fx-text-fill: #674d40; -fx-font-size: 11px; }

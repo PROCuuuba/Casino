@@ -1,21 +1,20 @@
 package ru.study.chain;
 
+import org.example.casino.BalanceManager;
+
 public final class Player {
     private final String name;
     private Integer count;
-    private Integer number;
     private Integer winnings;
 
     public Player(String name, Integer number) {
         this.name = name;
-        this.number = number;
         count = 0;
         winnings = 0;
     }
 
     public boolean pay(Integer amount) {
-        if (amount <= number) {
-            number -= amount;
+        if (BalanceManager.getInstance().spendCoins(amount)) {
             count++;
             return true;
         }
@@ -23,15 +22,15 @@ public final class Player {
     }
 
     public Integer getCount() { return count; }
-    public Integer getNumber() { return number; }
+    public Integer getNumber() { return BalanceManager.getInstance().getCoins(); }
     public String getName() { return name; }
     public Integer getWinnings() { return winnings; }
 
-    public void addNumber(Integer amount) { number += amount; }
+    public void addNumber(Integer amount) { BalanceManager.getInstance().addCoins(amount); }
     public void addWinnings(Integer amount) { winnings += amount; }
 
     public void collectWinnings() {
-        number += winnings;
+        BalanceManager.getInstance().addCoins(winnings);
         winnings = 0;
     }
 }

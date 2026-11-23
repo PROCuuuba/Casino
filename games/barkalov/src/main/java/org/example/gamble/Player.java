@@ -1,19 +1,18 @@
 package org.example.gamble;
 
+import org.example.casino.BalanceManager;
+
 public class Player {
     private final String name;
     private Integer count;
-    private Integer number;
 
     public Player(String name, Integer number) {
         this.name = name;
-        this.number = number;
         count = 0;
     }
 
     public boolean pay(Integer number) {
-        if (number <= this.number) {
-            this.number -= number;
+        if (BalanceManager.getInstance().spendCoins(number)) {
             count++;
             return true;
         } else
@@ -29,16 +28,14 @@ public class Player {
     }
 
     public Integer getNumber() {
-        return number;
+        return BalanceManager.getInstance().getCoins();
     }
 
     public void addNumber(Integer number) {
-        this.number += number;
+        BalanceManager.getInstance().addCoins(number);
     }
 
     public Integer takeNumber() {
-        Integer result = number;
-        number = 0;
-        return result;
+        return BalanceManager.getInstance().getCoins();
     }
 }

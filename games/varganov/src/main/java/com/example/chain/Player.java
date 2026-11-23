@@ -1,28 +1,24 @@
 package com.example.chain;
 
+import org.example.casino.BalanceManager;
+
 public class Player {
     private final String name;
-    private int coins;
     private int gamesCount;
 
     public Player(String name, int coins) {
         this.name = name;
-        this.coins = coins;
     }
 
     // Списывает монету за обычный ход.
     public boolean payForGame() {
-        if (coins < 1) {
-            return false;
-        }
-
-        coins--;
+        if (!BalanceManager.getInstance().spendCoins(1)) return false;
         gamesCount++;
         return true;
     }
 
     public void addCoins(int count) {
-        coins += count;
+        BalanceManager.getInstance().addCoins(count);
     }
 
     public String getName() {
@@ -30,7 +26,7 @@ public class Player {
     }
 
     public int getCoins() {
-        return coins;
+        return BalanceManager.getInstance().getCoins();
     }
 
     public int getGamesCount() {

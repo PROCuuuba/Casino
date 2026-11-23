@@ -5,6 +5,7 @@
     <dependencies>
         <dependency><groupId>org.example</groupId><artifactId>casino-api</artifactId></dependency>
         <dependency><groupId>org.openjfx</groupId><artifactId>javafx-fxml</artifactId></dependency>
+        <dependency><groupId>org.openjfx</groupId><artifactId>javafx-media</artifactId></dependency>
         <dependency><groupId>org.example</groupId><artifactId>game-barkalov</artifactId><version>${project.version}</version><scope>runtime</scope></dependency>
         <dependency><groupId>org.example</groupId><artifactId>game-chernixa</artifactId><version>${project.version}</version><scope>runtime</scope></dependency>
         <dependency><groupId>org.example</groupId><artifactId>game-korentsov</artifactId><version>${project.version}</version><scope>runtime</scope></dependency>
