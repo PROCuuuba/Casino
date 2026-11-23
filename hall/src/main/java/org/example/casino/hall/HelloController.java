@@ -84,7 +84,7 @@ public class HelloController {
     }
 
     private VBox createCard(GameMachine machine) {
-        Label icon = new Label("★");
+        Label icon = new Label(icon(machine));
         icon.getStyleClass().add("card-icon");
         Label title = new Label(machine.title());
         title.getStyleClass().add("card-title");
@@ -101,6 +101,7 @@ public class HelloController {
         VBox card = new VBox(9, icon, title, detail, open);
         card.setAlignment(Pos.CENTER);
         card.getStyleClass().add("game-card");
+        card.getStyleClass().add(machine.id().replace('.', '-'));
         if (machine == machines.getSelectionModel().getSelectedItem()) card.getStyleClass().add("selected-card");
         card.setOnMouseClicked(event -> machines.getSelectionModel().select(machine));
         return card;
@@ -108,10 +109,24 @@ public class HelloController {
 
     private String description(GameMachine machine) {
         return switch (machine.id()) {
-            case "barkalov.gamble", "chernixa.ludka", "larin.threebags", "putilin.pouches", "varganov.bags" -> "Испытайте удачу и выберите мешочек";
+            case "barkalov.gamble", "chernixa.ludka", "larin.threebags", "putilin.pouches" -> "Испытайте удачу и выберите мешочек";
+            case "varganov.bags" -> "Откройте сундук и найдите награду";
             case "korentsov.pixel" -> "Пиксельный автомат с собственным стилем";
             case "mogilevtsev.reels" -> "Классический автомат с барабанами";
             default -> "Игровой автомат участника команды";
+        };
+    }
+
+    private String icon(GameMachine machine) {
+        return switch (machine.id()) {
+            case "barkalov.gamble" -> "♠";
+            case "chernixa.ludka" -> "♦";
+            case "korentsov.pixel" -> "▣";
+            case "larin.threebags" -> "♣";
+            case "mogilevtsev.reels" -> "777";
+            case "putilin.pouches" -> "★";
+            case "varganov.bags" -> "▰";
+            default -> "?";
         };
     }
 }

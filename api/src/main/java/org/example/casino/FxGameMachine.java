@@ -39,6 +39,7 @@ public abstract class FxGameMachine implements GameMachine {
         try {
             prepare(stage);
             addNavigation(stage);
+            ButtonSound.install(stage.getScene());
             stage.setTitle(title);
             stage.showAndWait();
         } catch (Exception failure) {
