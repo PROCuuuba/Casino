@@ -9,12 +9,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.Group;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.util.Optional;
@@ -26,15 +29,13 @@ public class GameApplication extends Application {
     private final Label infoLabel = new Label("Добавьте монету и начните игру.");
     private final Button startButton = new Button("Начать игру");
     private final Button[] chests = new Button[3];
-    private final ImageView[] chestImages = new ImageView[3];
-    private final Image closedChest = new Image(GameApplication.class.getResource("chest-closed.jfif").toExternalForm());
-    private final Image openChest = new Image(GameApplication.class.getResource("chest-open.jpg").toExternalForm());
+    private final ChestShape[] chestShapes = new ChestShape[3];
     private boolean freeNextGame;
     private boolean gameStarted;
 
     @Override
     public void start(Stage stage) {
-        stage.setTitle("Игровой автомат");
+        stage.setTitle("Сундуки удачи");
 
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(18, 28, 24, 28));
@@ -87,12 +88,8 @@ public class GameApplication extends Application {
         stage.show();
     }
     private Button createChestButton(int number) {
-        ImageView picture = new ImageView(closedChest);
-        picture.setFitWidth(118);
-        picture.setFitHeight(96);
-        picture.setPreserveRatio(true);
-        picture.setSmooth(false);
-        chestImages[number - 1] = picture;
+        ChestShape picture = new ChestShape();
+        chestShapes[number - 1] = picture;
 
         StackPane imageBox = new StackPane(picture);
         imageBox.setPrefSize(126, 100);
@@ -140,7 +137,7 @@ public class GameApplication extends Application {
         }
 
         freeNextGame = false;
-        chestImages[index].setImage(openChest);
+        chestShapes[index].open();
         GameDecision decision = actionChain.play(player);
         updatePlayerInfo();
         showDecision(decision);
@@ -188,7 +185,7 @@ public class GameApplication extends Application {
     }
 
     private void resetChests() {
-        for (ImageView chestImage : chestImages) chestImage.setImage(closedChest);
+        for (ChestShape chestShape : chestShapes) chestShape.close();
     }
 
     private void updateChestButtons() {
@@ -200,6 +197,62 @@ public class GameApplication extends Application {
         alert.setTitle(title);
         alert.setHeaderText(text);
         alert.showAndWait();
+    }
+
+    private static final class ChestShape extends Pane {
+        private final Group lid = new Group();
+
+        private ChestShape() {
+            setPrefSize(126, 100);
+
+            Polygon back = polygon(23, 43, 38, 33, 113, 33, 101, 43);
+            back.setFill(Color.web("#5c3a1c"));
+            Polygon right = polygon(101, 43, 113, 33, 113, 77, 101, 88);
+            right.setFill(Color.web("#7a4c20"));
+            Rectangle front = rectangle(23, 43, 78, 45, "#a36a2c");
+            Rectangle rim = rectangle(23, 43, 78, 7, "#e0a342");
+            Rectangle lock = rectangle(57, 42, 12, 17, "#d8c079");
+            lock.setStroke(Color.web("#402718"));
+            lock.setStrokeWidth(2);
+            Rectangle leftPixel = rectangle(31, 57, 12, 8, "#c58436");
+            Rectangle rightPixel = rectangle(78, 70, 14, 8, "#7c4b20");
+
+            Polygon lidTop = polygon(23, 31, 38, 20, 113, 20, 101, 31);
+            lidTop.setFill(Color.web("#c48132"));
+            Polygon lidFront = polygon(23, 31, 101, 31, 101, 48, 23, 48);
+            lidFront.setFill(Color.web("#8b5522"));
+            Polygon lidSide = polygon(101, 31, 113, 20, 113, 37, 101, 48);
+            lidSide.setFill(Color.web("#5c381b"));
+            Rectangle lidStripe = rectangle(31, 35, 62, 5, "#e0a342");
+
+            lid.getChildren().addAll(lidTop, lidFront, lidSide, lidStripe);
+            getChildren().addAll(back, right, front, rim, leftPixel, rightPixel, lock, lid);
+        }
+
+        private void open() {
+            lid.setTranslateY(-18);
+            lid.setRotate(-16);
+        }
+
+        private void close() {
+            lid.setTranslateY(0);
+            lid.setRotate(0);
+        }
+
+        private static Polygon polygon(double... points) {
+            Polygon polygon = new Polygon(points);
+            polygon.setStroke(Color.web("#2b1b14"));
+            polygon.setStrokeWidth(2);
+            return polygon;
+        }
+
+        private static Rectangle rectangle(double x, double y, double width, double height, String color) {
+            Rectangle rectangle = new Rectangle(x, y, width, height);
+            rectangle.setFill(Color.web(color));
+            rectangle.setStroke(Color.web("#2b1b14"));
+            rectangle.setStrokeWidth(1.5);
+            return rectangle;
+        }
     }
 
     public static void main(String[] args) {
