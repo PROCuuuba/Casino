@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="22" styleClass="lotto-root" stylesheets="@lotto.css"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example._outof36.LottoController">
+    <HBox alignment="CENTER_LEFT" spacing="12">
+        <VBox spacing="1">
+            <Label text="5 из 36" styleClass="game-title"/>
+            <Label text="Ставка · 2 условные монеты" styleClass="stake-label"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="topUpButton" text="+5 монет" onAction="#topUp" styleClass="secondary-button"/>
+        <VBox alignment="CENTER_RIGHT" spacing="2" styleClass="balance-panel">
+            <Label text="Баланс" styleClass="balance-caption"/>
+            <Label fx:id="balanceValue" styleClass="balance-value"/>
+        </VBox>
+    </HBox>
+
+    <HBox spacing="18" VBox.vgrow="ALWAYS">
+        <VBox spacing="12" prefWidth="422" HBox.hgrow="ALWAYS" styleClass="panel">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label text="Ваш билет" styleClass="panel-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="selectionCount" styleClass="selection-count"/>
+            </HBox>
+            <GridPane fx:id="numberGrid" alignment="CENTER" hgap="8" vgap="8" styleClass="ticket-grid"
+                      VBox.vgrow="ALWAYS"/>
+            <HBox spacing="8">
+                <Button fx:id="randomButton" text="Случайный выбор" onAction="#pickRandomly"
+                        maxWidth="Infinity" HBox.hgrow="ALWAYS" styleClass="secondary-button"/>
+                <Button fx:id="resetButton" text="Сбросить" onAction="#resetTicket"
+                        styleClass="secondary-button"/>
+            </HBox>
+            <Button fx:id="drawButton" text="Разыграть за 2 монеты" onAction="#draw"
+                    maxWidth="Infinity" styleClass="draw-button"/>
+            <Label fx:id="gameStatus" maxWidth="Infinity" minHeight="-Infinity" wrapText="true"
+                   styleClass="game-status"/>
+        </VBox>
+
+        <VBox spacing="14" prefWidth="364" HBox.hgrow="ALWAYS" styleClass="panel">
+            <Label text="Выпавшие шары" styleClass="panel-title"/>
+            <HBox fx:id="drawnBalls" alignment="CENTER" spacing="8" styleClass="drawn-balls"/>
+            <Label fx:id="roundResult" maxWidth="Infinity" minHeight="-Infinity" wrapText="true"
+                   styleClass="round-result"/>
+            <Region VBox.vgrow="ALWAYS"/>
+            <Label text="Таблица призов" styleClass="panel-title"/>
+            <HBox alignment="CENTER_LEFT" styleClass="table-head">
+                <Label text="Совпадения"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Выплата"/>
+            </HBox>
+            <GridPane fx:id="prizes" vgap="3" styleClass="prize-grid">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                    <ColumnConstraints halignment="RIGHT"/>
+                </columnConstraints>
+            </GridPane>
+        </VBox>
+    </HBox>
+</VBox>
