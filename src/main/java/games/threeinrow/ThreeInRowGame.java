@@ -1,5 +1,6 @@
 package games.threeinrow;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -8,25 +9,48 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.example.casino.BalanceManager;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.function.IntConsumer;
 
-public class ThreeInRowGame {
+public final class ThreeInRowGame {
+
     private static final int SPIN_COST = 1;
-    private static final String[] SYMBOLS = {"🍒", "🍋", "⭐️", "💎", "🔔", "7"};
-    private static final String DEFAULT_CELL_STYLE =
-            "-fx-font-size: 40px; " +
-                    "-fx-border-color: #34495e; " +
-                    "-fx-border-width: 2; " +
-                    "-fx-background-color: #ecf0f1; " +
-                    "-fx-min-width: 80px; " +
-                    "-fx-min-height: 80px;";
+    private static final String[] SYMBOLS = {"🍒", "🍋", "⭐", "💎", "🔔", "7"};
 
+    private static final String CELL_STYLE =
+            "-fx-font-size: 40px; -fx-border-color: #34495e; -fx-border-width: 2;"
+                    + "-fx-background-color: #ecf0f1; -fx-min-width: 80px; -fx-min-height: 80px;";
+    private static final String WIN_CELL_STYLE =
+            "-fx-font-size: 40px; -fx-border-color: #f1c40f; -fx-border-width: 4;"
+                    + "-fx-background-color: #fdf3d0; -fx-min-width: 80px; -fx-min-height: 80px;";
+
+    private static final int[][][] LINES = {
+            {{0, 0}, {0, 1}, {0, 2}},
+            {{1, 0}, {1, 1}, {1, 2}},
+            {{2, 0}, {2, 1}, {2, 2}},
+            {{0, 0}, {1, 0}, {2, 0}},
+            {{0, 1}, {1, 1}, {2, 1}},
+            {{0, 2}, {1, 2}, {2, 2}},
+            {{0, 0}, {1, 1}, {2, 2}},
+            {{0, 2}, {1, 1}, {2, 0}}
+    };
+
+    private final BalanceManager wallet = BalanceManager.getInstance();
     private final Random random = new Random();
     private final Label[][] cells = new Label[3][3];
     private final Label balanceLabel = new Label();
-    private final Label statusLabel = new Label("Вставьте монету и нажмите «Вращение»");
-    private int balance = 0;
+    private final Label spinsLabel = new Label("Вращений: 0");
+    private final Label statusLabel = new Label("Нажмите «Вращение». Ставка — 1 монета.");
+    private final Button spinButton = new Button("Вращение (1 монета)");
+
+  private final IntConsumer balanceListener =
+            coins -> Platform.runLater(() -> onBalanceChanged(coins));
+
+    private int spins;
 
     public Parent createRoot() {
         GridPane grid = new GridPane();
@@ -37,44 +61,54 @@ public class ThreeInRowGame {
             for (int col = 0; col < 3; col++) {
                 Label cell = new Label("?");
                 cell.setAlignment(Pos.CENTER);
-                cell.setStyle(DEFAULT_CELL_STYLE);
+                cell.setStyle(CELL_STYLE);
                 cells[row][col] = cell;
                 grid.add(cell, col, row);
             }
         }
 
-        Button addCoinButton = new Button("Вставить монету");
-        addCoinButton.setOnAction(e -> {
-            balance++;
-            updateUI();
-            statusLabel.setText("Монета добавлена. Можно вращать.");
-        });
+        spinButton.setStyle("-fx-font-size: 15px; -fx-background-color: #2ecc71; -fx-text-fill: white;");
+        spinButton.setOnAction(event -> spin());
 
-        Button spinButton = new Button("Вращение");
-        spinButton.setOnAction(e -> spin());
+        Label hint = new Label("Монеты общие для всего зала — пополнить можно кнопкой в каталоге.");
+        hint.setStyle("-fx-font-size: 12px; -fx-text-fill: #4a5a63;");
+        hint.setWrapText(true);
+        hint.setMaxWidth(380);
+        hint.setAlignment(Pos.CENTER);
 
-        HBox controls = new HBox(10, addCoinButton, spinButton);
-        controls.setAlignment(Pos.CENTER);
-
-        balanceLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        balanceLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        spinsLabel.setStyle("-fx-font-size: 13px;");
         statusLabel.setStyle("-fx-font-size: 14px;");
+        statusLabel.setWrapText(true);
+        statusLabel.setMaxWidth(400);
+        statusLabel.setAlignment(Pos.CENTER);
 
-        VBox root = new VBox(15, balanceLabel, grid, controls, statusLabel);
+        HBox stats = new HBox(20, balanceLabel, spinsLabel);
+        stats.setAlignment(Pos.CENTER);
+
+        VBox root = new VBox(14, stats, grid, spinButton, statusLabel, hint);
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(20));
         root.setStyle("-fx-background-color: #bdc3c7;");
 
-        updateUI();
+        // Подписка сразу же пришлёт текущее значение — метка заполнится сама.
+        wallet.addListener(balanceListener);
         return root;
     }
 
+    public void dispose() {
+        wallet.removeListener(balanceListener);
+    }
+
     private void spin() {
-        if (balance < SPIN_COST) {
-            statusLabel.setText("Недостаточно монет. Вставьте монету.");
+        // Ставка списывается из общего баланса; при нехватке монет ход не начинается.
+        if (!wallet.spendCoins(SPIN_COST)) {
+            statusLabel.setText("Недостаточно монет. Пополните общий баланс в игровом зале.");
             return;
         }
 
-        balance -= SPIN_COST;
+        spins++;
+        spinsLabel.setText("Вращений: " + spins);
         resetCellStyles();
 
         for (int row = 0; row < 3; row++) {
@@ -83,48 +117,53 @@ public class ThreeInRowGame {
             }
         }
 
-        int winningLines = countWinningLines();
-        if (winningLines == 0) {
-            statusLabel.setText("Выигрышных рядов нет. Списана 1 монетка.");
-        } else {
-            int payout = winningLines;
-            balance += payout;
-            statusLabel.setText("Выигрышных рядов: " + winningLines
-                    + ". Начислено: +" + payout + " монет.");
+        List<int[][]> winning = winningLines();
+        if (winning.isEmpty()) {
+            statusLabel.setText("Выигрышных рядов нет. Списана 1 монета.");
+            return;
         }
-        updateUI();
+
+        for (int[][] line : winning) {
+            for (int[] cell : line) {
+                cells[cell[0]][cell[1]].setStyle(WIN_CELL_STYLE);
+            }
+        }
+
+        int payout = winning.size();          // 1 ряд — 1 монета, N рядов — N монет
+        wallet.addCoins(payout);              // addCoins требует amount > 0
+        statusLabel.setText("Выигрышных рядов: " + payout + ". Начислено: +" + payout + " монет.");
     }
 
-    private int countWinningLines() {
-        int count = 0;
-        for (int row = 0; row < 3; row++) {
-            if (isSame(row, 0, row, 1, row, 2)) count++;
+    private List<int[][]> winningLines() {
+        List<int[][]> found = new ArrayList<>();
+        for (int[][] line : LINES) {
+            if (isSame(line)) found.add(line);
         }
-        for (int col = 0; col < 3; col++) {
-            if (isSame(0, col, 1, col, 2, col)) count++;
-        }
-        if (isSame(0, 0, 1, 1, 2, 2)) count++;
-        if (isSame(0, 2, 1, 1, 2, 0)) count++;
-        return count;
+        return found;
     }
 
-    private boolean isSame(int r1, int c1, int r2, int c2, int r3, int c3) {
-        String a = cells[r1][c1].getText();
-        return a != null
-                && !a.equals("?")
-                && a.equals(cells[r2][c2].getText())
-                && a.equals(cells[r3][c3].getText());
+    private boolean isSame(int[][] line) {
+        String first = symbol(line[0]);
+        return first != null && !first.equals("?")
+                && first.equals(symbol(line[1]))
+                && first.equals(symbol(line[2]));
+    }
+
+    private String symbol(int[] cell) {
+        return cells[cell[0]][cell[1]].getText();
     }
 
     private void resetCellStyles() {
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 3; col++) {
-                cells[row][col].setStyle(DEFAULT_CELL_STYLE);
-            }
+        for (Label[] row : cells) {
+            for (Label cell : row) cell.setStyle(CELL_STYLE);
         }
     }
 
-    private void updateUI() {
-        balanceLabel.setText("Баланс: " + balance + " монет");
+    private void onBalanceChanged(int coins) {
+        balanceLabel.setText("Общий баланс: " + coins + " монет");
+        spinButton.setDisable(coins < SPIN_COST);
+        if (coins < SPIN_COST) {
+            statusLabel.setText("Монет нет. Вернитесь в каталог и пополните общий баланс.");
+        }
     }
 }
