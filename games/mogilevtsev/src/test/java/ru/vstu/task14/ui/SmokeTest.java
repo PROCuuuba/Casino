@@ -2,6 +2,7 @@ package ru.vstu.task14.ui;
 
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import org.example.casino.BalanceManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
@@ -15,6 +16,9 @@ class SmokeTest {
     @Test
     void loadsArtworkAndSpendsOnlyAvailableCoins() throws Exception {
         var check = new FutureTask<Void>(() -> {
+            BalanceManager balance = BalanceManager.getInstance();
+            if (balance.getCoins() > 0) balance.spendCoins(balance.getCoins());
+            balance.addCoins(10);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("view.fxml"));
             loader.load();
             Controller controller = loader.getController();

@@ -109,7 +109,8 @@ public class HelloController {
 
     private String description(GameMachine machine) {
         return switch (machine.id()) {
-            case "barkalov.gamble", "chernixa.ludka", "larin.threebags", "putilin.pouches" -> "Испытайте удачу и выберите мешочек";
+            case "barkalov.gamble", "chernixa.ludka", "larin.threebags" -> "Испытайте удачу и выберите мешочек";
+            case "putilin.pouches" -> "Ставки на цвет: красный и чёрный ×2, зелёный ×5";
             case "varganov.bags" -> "Откройте сундук и найдите награду";
             case "korentsov.pixel" -> "Пиксельный автомат с собственным стилем";
             case "mogilevtsev.reels" -> "Классический автомат с барабанами";

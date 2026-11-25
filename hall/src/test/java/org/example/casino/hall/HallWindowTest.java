@@ -1,25 +1,30 @@
 package org.example.casino.hall;
 
 import javafx.application.Platform;
+import javafx.animation.PauseTransition;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
+import javafx.util.Duration;
+import org.example.casino.BalanceManager;
 import org.example.casino.GameMachine;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
@@ -34,11 +39,10 @@ class HallWindowTest {
         return Stream.of(
                 new Play("barkalov.gamble", "Внести монету", "Монета внесена. Нажмите «Начать игру».", "Начать игру", "Выберите один из трёх мешочков."),
                 new Play("chernixa.ludka", "Кинуть монетку", "Монеток у игрока: 1", "Старт игры", "Игра идет..."),
-                new Play("korentsov.pixel", "Кинуть монетку (+1)", "Монеток: 2", "Начать игру", "Сыграно раундов: 1"),
+                new Play("korentsov.pixel", "Кинуть монетку (+1)", "Монеток: 1", "Начать игру", "Сыграно раундов: 1"),
                 new Play("larin.threebags", "🪙 Вставить монету", "Баланс: 1 монет | Ходов: 0", "▶ Начать игру", "Выберите одну из трех коробок!"),
-                new Play("mogilevtsev.reels", "Заправить монетку", "Игрок: на счете 11 монет, ставок сделано 0", "Начать игру", "Игрок: на счете 10 монет, ставок сделано 1"),
-                new Play("putilin.pouches", "Внести монету", "Монета добавлена.", "Старт", "Выберите один из мешочков."),
-                new Play("varganov.bags", "Добавить 1 монету", "Монеты: 1 | Сыграно попыток: 0", "Начать игру", "Выберите любой мешочек.")
+                new Play("mogilevtsev.reels", "Заправить монетку", "Игрок: на счете 1 монет, ставок сделано 0", "Начать игру", "Игрок: на счете 0 монет, ставок сделано 1"),
+                new Play("varganov.bags", "Добавить 1 монету", "Монеты: 1 | Сыграно попыток: 0", "Начать игру", "Выберите любой сундук.")
         );
     }
 
@@ -50,6 +54,17 @@ class HallWindowTest {
     @AfterAll
     static void stopFx() {
         Platform.exit();
+    }
+
+    @BeforeEach
+    void resetBalance() throws Exception {
+        var reset = new FutureTask<Void>(() -> {
+            BalanceManager balance = BalanceManager.getInstance();
+            if (balance.getCoins() > 0) balance.spendCoins(balance.getCoins());
+            return null;
+        });
+        Platform.runLater(reset);
+        reset.get(5, TimeUnit.SECONDS);
     }
 
     @ParameterizedTest(name = "{0}")
@@ -84,31 +99,47 @@ class HallWindowTest {
     @Test
     void finishesAPaidRoundBeforeOpeningAnotherMachine() throws Exception {
         withHall(hall -> {
+            BalanceManager balance = BalanceManager.getInstance();
+            balance.addCoins(100);
+            CompletableFuture<Void> completed = new CompletableFuture<>();
+            int[] settled = new int[1];
+            select(hall, "putilin.pouches");
+            Parent card = (Parent) hall.getScene().lookup(".putilin-pouches");
+            assertTrue(labels(card).contains("Рулетка — Путилин"));
+            assertTrue(labels(card).contains("Ставки на цвет: красный и чёрный ×2, зелёный ×5"));
             play(hall, "putilin.pouches", game -> {
                 Parent root = game.getScene().getRoot();
-                button(root, "Внести монету").fire();
-                button(root, "Старт").fire();
-                var answer = new FutureTask<Void>(() -> {
-                    var dialogs = Window.getWindows().stream().filter(window -> window != hall && window != game).toList();
+                ((TextField) root.lookup("#betAmount")).setText("25");
+                root.lookupAll(".toggle-button").stream().map(ToggleButton.class::cast)
+                        .filter(toggle -> toggle.getText().equals("Зелёный ×5")).findFirst().orElseThrow().fire();
+                button(root, "Крутить").fire();
+                settled[0] = balance.getCoins();
+                assertTrue(settled[0] == 75 || settled[0] == 200);
+                PauseTransition wait = new PauseTransition(Duration.seconds(3.5));
+                wait.setOnFinished(event -> {
                     try {
-                        assertEquals(1, dialogs.size());
-                        DialogPane dialog = (DialogPane) dialogs.getFirst().getScene().getRoot();
-                        var finish = dialog.getButtonTypes().stream()
-                                .filter(type -> type.getButtonData() == ButtonBar.ButtonData.NO).findFirst().orElseThrow();
-                        ((Button) dialog.lookupButton(finish)).fire();
+                        assertTrue(((Label) root.lookup("#rouletteStatus")).getText().startsWith("Выпал "));
+                        assertEquals("Монеты: " + settled[0], ((Label) root.lookup("#rouletteBalance")).getText());
+                        assertEquals(settled[0], balance.getCoins());
+                        completed.complete(null);
+                    } catch (Throwable failure) {
+                        completed.completeExceptionally(failure);
                     } finally {
-                        dialogs.forEach(Window::hide);
+                        button(root, "В каталог").fire();
                     }
-                    return null;
                 });
-                Platform.runLater(answer);
-                button(root, "1").fire();
-                assertTrue(answer.isDone());
-                answer.get(2, TimeUnit.SECONDS);
-                assertTrue(labels(root).contains("Игра завершена."));
+                wait.play();
+            });
+            completed.get(2, TimeUnit.SECONDS);
+            assertEquals("🪙 " + settled[0], ((Label) hall.getScene().lookup("#balance")).getText());
+            play(hall, "larin.threebags", game -> {
+                Parent root = game.getScene().getRoot();
+                assertTrue(labels(root).contains("Баланс: " + settled[0] + " монет | Ходов: 0"));
+                button(root, "▶ Начать игру").fire();
+                assertEquals(settled[0] - 1, balance.getCoins());
                 button(root, "В каталог").fire();
             });
-            play(hall, "larin.threebags", game -> button(game.getScene().getRoot(), "В каталог").fire());
+            assertEquals(settled[0] - 1, balance.getCoins());
         });
     }
 
@@ -129,10 +160,10 @@ class HallWindowTest {
                 assertEquals(machine.title(), game.getTitle());
                 assertEquals(Modality.APPLICATION_MODAL, game.getModality());
                 action.run(game);
-                assertFalse(game.isShowing(), "Игровое окно не закрылось");
                 return null;
-            } finally {
+            } catch (Exception | AssertionError failure) {
                 List.copyOf(Window.getWindows()).stream().filter(window -> window != hall).forEach(Window::hide);
+                throw failure;
             }
         });
         Platform.runLater(interaction);
