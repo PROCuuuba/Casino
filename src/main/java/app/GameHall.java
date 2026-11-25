@@ -2,6 +2,7 @@ package app;
 
 import api.GameMachine;
 import games.threebags.ThreeBagsAdapter;
+import games.threeinrow.ThreeInRowAdapter;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -25,7 +26,7 @@ public class GameHall {
 
             // Регистрация автоматов
             hall.catalog.register(new ThreeBagsAdapter());
-
+            hall.catalog.register(new ThreeInRowAdapter());
             hall.showCatalog();
         }
     }
