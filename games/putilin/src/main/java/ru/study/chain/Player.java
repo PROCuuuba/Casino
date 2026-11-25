@@ -3,34 +3,17 @@ package ru.study.chain;
 import org.example.casino.BalanceManager;
 
 public final class Player {
-    private final String name;
-    private Integer count;
-    private Integer winnings;
+    private final BalanceManager balance = BalanceManager.getInstance();
 
-    public Player(String name, Integer number) {
-        this.name = name;
-        count = 0;
-        winnings = 0;
+    public int getBalance() { return balance.getCoins(); }
+
+    public void addCoins(long amount) {
+        if (amount < 0) throw new IllegalArgumentException("Количество монет не может быть отрицательным.");
+        if (amount > 0) balance.addCoins(Math.toIntExact(amount));
     }
 
-    public boolean pay(Integer amount) {
-        if (BalanceManager.getInstance().spendCoins(amount)) {
-            count++;
-            return true;
-        }
-        return false;
-    }
-
-    public Integer getCount() { return count; }
-    public Integer getNumber() { return BalanceManager.getInstance().getCoins(); }
-    public String getName() { return name; }
-    public Integer getWinnings() { return winnings; }
-
-    public void addNumber(Integer amount) { BalanceManager.getInstance().addCoins(amount); }
-    public void addWinnings(Integer amount) { winnings += amount; }
-
-    public void collectWinnings() {
-        BalanceManager.getInstance().addCoins(winnings);
-        winnings = 0;
+    public void pay(int bet) {
+        if (bet <= 0) throw new IllegalArgumentException("Ставка должна быть положительной.");
+        if (!balance.spendCoins(bet)) throw new IllegalArgumentException("Недостаточно монет для ставки.");
     }
 }
