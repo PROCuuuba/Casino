@@ -191,7 +191,7 @@ class LottoWindowTest {
         FXMLLoader loader = new FXMLLoader(LottoApplication.class.getResource("lotto-view.fxml"));
         loader.setControllerFactory(type -> new LottoController(fixedDraw));
         stage.setScene(new Scene(loader.load(), 884, 660));
-        loader.<LottoController>getController().attach(stage, true);
+        loader.<LottoController>getController().attach(stage);
         stage.show();
     }
 

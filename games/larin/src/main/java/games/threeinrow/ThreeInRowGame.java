@@ -19,6 +19,7 @@ import java.util.function.IntConsumer;
 public final class ThreeInRowGame {
 
     private static final int SPIN_COST = 1;
+    private static final int TOP_UP_AMOUNT = 5;
     private static final String[] SYMBOLS = {"🍒", "🍋", "⭐", "💎", "🔔", "7"};
 
     private static final String CELL_STYLE =
@@ -75,7 +76,16 @@ public final class ThreeInRowGame {
         spinButton.setStyle("-fx-font-size: 15px; -fx-background-color: #2ecc71; -fx-text-fill: white;");
         spinButton.setOnAction(event -> spin());
 
-        Label hint = new Label("Монеты общие для всего зала — пополнить можно кнопкой в каталоге.");
+        Button topUpButton = new Button("+" + TOP_UP_AMOUNT + " монет");
+        topUpButton.setStyle("-fx-font-size: 15px; -fx-background-color: #34495e; -fx-text-fill: white;");
+        topUpButton.setOnAction(event -> {
+            wallet.addCoins(TOP_UP_AMOUNT);
+            statusLabel.setText("В общий баланс добавлено " + TOP_UP_AMOUNT + " монет.");
+        });
+        HBox actions = new HBox(10, spinButton, topUpButton);
+        actions.setAlignment(Pos.CENTER);
+
+        Label hint = new Label("Баланс сохраняется при переходе между автоматами.");
         hint.setStyle("-fx-font-size: 12px; -fx-text-fill: #4a5a63;");
         hint.setWrapText(true);
         hint.setMaxWidth(380);
@@ -91,7 +101,7 @@ public final class ThreeInRowGame {
         HBox stats = new HBox(20, balanceLabel, spinsLabel);
         stats.setAlignment(Pos.CENTER);
 
-        VBox root = new VBox(14, stats, grid, spinButton, statusLabel, hint);
+        VBox root = new VBox(14, stats, grid, actions, statusLabel, hint);
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(20));
         root.setStyle("-fx-background-color: #bdc3c7;");
@@ -108,7 +118,7 @@ public final class ThreeInRowGame {
     private void spin() {
         // Ставка списывается из общего баланса; при нехватке монет ход не начинается.
         if (!wallet.spendCoins(SPIN_COST)) {
-            statusLabel.setText("Недостаточно монет. Пополните общий баланс в игровом зале.");
+            statusLabel.setText("Недостаточно монет для вращения.");
             return;
         }
 
@@ -168,7 +178,7 @@ public final class ThreeInRowGame {
         balanceLabel.setText("Общий баланс: " + coins + " монет");
         spinButton.setDisable(coins < SPIN_COST);
         if (coins < SPIN_COST) {
-            statusLabel.setText("Монет нет. Вернитесь в каталог и пополните общий баланс.");
+            statusLabel.setText("Нажмите «+" + TOP_UP_AMOUNT + " монет», чтобы начать.");
         }
     }
 }

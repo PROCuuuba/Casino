@@ -127,6 +127,11 @@
     -fx-text-fill: #f0f6fb;
 }
 
+.top-up-button {
+    -fx-border-color: #fff3de;
+    -fx-border-width: 2;
+}
+
 .secondary-button:hover {
     -fx-background-color: #304d6b;
 }

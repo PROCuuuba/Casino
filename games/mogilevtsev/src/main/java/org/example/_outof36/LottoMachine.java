@@ -12,6 +12,6 @@ public final class LottoMachine extends FxGameMachine {
 
     @Override
     protected void prepare(Stage stage) throws IOException {
-        LottoApplication.prepare(stage, false);
+        LottoApplication.prepare(stage);
     }
 }

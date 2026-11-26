@@ -145,26 +145,35 @@ class HallWindowTest {
     void playsThreeInRowAndLottoWithSharedBalance() throws Exception {
         withHall(hall -> {
             BalanceManager balance = BalanceManager.getInstance();
-            balance.addCoins(5);
             play(hall, "larin.threerows", game -> {
                 Parent root = game.getScene().getRoot();
+                assertTrue(labels(root).contains("Общий баланс: 0 монет"));
+                var topUp = button(root, "+5 монет");
+                assertTrue(topUp.isVisible());
+                topUp.fire();
+                assertEquals(5, balance.getCoins());
                 assertTrue(labels(root).contains("Общий баланс: 5 монет"), labels(root).toString());
+                assertTrue(labels(root).contains("Вращений: 0"));
                 button(root, "Вращение (1 монета)").fire();
                 assertTrue(labels(root).contains("Вращений: 1"), labels(root).toString());
                 button(root, "В каталог").fire();
             });
-            if (balance.getCoins() < 2) {
-                balance.addCoins(2);
-            }
-            int beforeDraw = balance.getCoins();
+            int beforeLotto = balance.getCoins();
             play(hall, "barkalov.lotto536", game -> {
                 Parent root = game.getScene().getRoot();
+                Button topUp = button(root, "+5 монет");
+                assertTrue(topUp.isVisible());
+                assertTrue(topUp.isManaged());
+                topUp.fire();
+                int beforeDraw = beforeLotto + 5;
+                assertEquals(beforeDraw, balance.getCoins());
+                assertEquals(Integer.toString(beforeDraw), ((Label) root.lookup("#balanceValue")).getText());
                 ((Button) root.lookup("#randomButton")).fire();
                 ((Button) root.lookup("#drawButton")).fire();
                 assertEquals(beforeDraw - 2, balance.getCoins());
                 button(root, "В каталог").fire();
             });
-            assertTrue(balance.getCoins() >= beforeDraw - 2);
+            assertTrue(balance.getCoins() >= beforeLotto + 3);
         });
     }
 

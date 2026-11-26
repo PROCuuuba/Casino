@@ -96,9 +96,7 @@ public final class LottoController {
         updateBalance(balance.getCoins());
     }
 
-    void attach(Stage stage, boolean standalone) {
-        topUpButton.setManaged(standalone);
-        topUpButton.setVisible(standalone);
+    void attach(Stage stage) {
         balance.addListener(balanceListener);
         stage.addEventHandler(WindowEvent.WINDOW_HIDDEN, event -> {
             balance.removeListener(balanceListener);

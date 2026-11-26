@@ -17,7 +17,7 @@
             <Label text="Ставка · 2 условные монеты" styleClass="stake-label"/>
         </VBox>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button fx:id="topUpButton" text="+5 монет" onAction="#topUp" styleClass="secondary-button"/>
+        <Button fx:id="topUpButton" text="+5 монет" onAction="#topUp" styleClass="secondary-button,top-up-button"/>
         <VBox alignment="CENTER_RIGHT" spacing="2" styleClass="balance-panel">
             <Label text="Баланс" styleClass="balance-caption"/>
             <Label fx:id="balanceValue" styleClass="balance-value"/>
