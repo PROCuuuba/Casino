@@ -5,11 +5,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.util.Objects;
 
@@ -39,6 +38,7 @@ public abstract class FxGameMachine implements GameMachine {
         try {
             prepare(stage);
             addNavigation(stage);
+            ButtonSound.install(stage.getScene());
             stage.setTitle(title);
             stage.showAndWait();
         } catch (Exception failure) {
@@ -55,21 +55,28 @@ public abstract class FxGameMachine implements GameMachine {
         Parent game = scene.getRoot();
         Button back = new Button("В каталог");
         back.setId("returnToCatalog");
+        Label arrow = new Label("←");
+        arrow.setStyle("-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #301116;");
+        back.setGraphic(arrow);
+        back.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-background-color: #e0ad42; "
+                + "-fx-text-fill: #301116; -fx-background-radius: 8; -fx-cursor: hand;");
         back.setOnAction(event -> stage.close());
-        HBox footer = new HBox(back);
-        footer.setAlignment(Pos.CENTER_RIGHT);
-        footer.setPadding(new Insets(5, 12, 5, 12));
+        Label hint = new Label("Выберите другой автомат в игровом зале");
+        hint.setStyle("-fx-font-size: 12px; -fx-text-fill: #f0d8c2;");
+        BorderPane footer = new BorderPane();
+        footer.setLeft(hint);
+        footer.setRight(back);
+        BorderPane.setAlignment(back, Pos.CENTER_RIGHT);
+        footer.setMinHeight(48);
+        footer.setPrefHeight(48);
+        footer.setMaxHeight(48);
+        footer.setPadding(new Insets(8, 14, 8, 14));
+        footer.setStyle("-fx-background-color: linear-gradient(to right, #35131a, #6d202b); -fx-border-color: #b27a32 transparent transparent transparent; -fx-border-width: 1;");
         BorderPane frame = new BorderPane();
-        scene.setRoot(frame);
         frame.setCenter(game);
         frame.setBottom(footer);
-        stage.addEventHandler(WindowEvent.WINDOW_SHOWN, event -> {
-            double height = footer.prefHeight(-1);
-            double originalHeight = stage.getHeight();
-            if (stage.getMinHeight() > 0) {
-                stage.setMinHeight(stage.getMinHeight() + height);
-            }
-            stage.setHeight(originalHeight + height);
-        });
+        Scene framedScene = new Scene(frame, scene.getWidth(), scene.getHeight() + footer.prefHeight(scene.getWidth()));
+        framedScene.getStylesheets().setAll(scene.getStylesheets());
+        stage.setScene(framedScene);
     }
 }

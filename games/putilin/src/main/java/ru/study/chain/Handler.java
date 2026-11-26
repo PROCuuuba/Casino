@@ -1,14 +1,13 @@
 package ru.study.chain;
 
 public abstract class Handler {
-    private Handler processor;
+    private final Handler next;
 
-    public Handler(Handler processor) {
-        this.processor = processor;
+    protected Handler(Handler next) {
+        this.next = next;
     }
 
-    public boolean process(Integer request) {
-        if (processor != null) return processor.process(request);
-        return true;
+    public long process(BetColor selected, BetColor result, int bet) {
+        return next == null ? 0 : next.process(selected, result, bet);
     }
 }

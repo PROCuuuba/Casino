@@ -1,0 +1,34 @@
+.root { -fx-font-family: "Segoe UI"; -fx-background-color: radial-gradient(radius 95%, #45242b, #170d12); }
+.header { -fx-background-color: linear-gradient(to right, #180b10, #4f2332); -fx-border-color: transparent transparent #936335 transparent; -fx-border-width: 0 0 1 0; }
+.hall-title { -fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #fff2ca; }
+.hall-subtitle { -fx-font-size: 12px; -fx-text-fill: #dab898; }
+.balance-box { -fx-background-color: rgba(0,0,0,0.32); -fx-background-radius: 10; -fx-border-color: #b98b48; -fx-border-radius: 10; -fx-padding: 7 13 7 13; }
+.balance-caption { -fx-font-size: 9px; -fx-text-fill: #e8c67b; -fx-font-weight: bold; }
+.balance-value { -fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #ffe174; }
+.music-button { -fx-background-color: transparent; -fx-border-color: #a26c65; -fx-border-radius: 8; -fx-text-fill: #f5dfcd; -fx-font-size: 11px; -fx-padding: 7 10 7 10; }
+.music-button:hover { -fx-background-color: rgba(255,218,157,0.12); }
+.content-split { -fx-background-color: #211117; }
+.catalog-pane { -fx-background-color: linear-gradient(to bottom, #26151b, #171014); -fx-border-color: transparent #70462f transparent transparent; -fx-border-width: 0 1 0 0; }
+.games-pane { -fx-background-color: radial-gradient(radius 100%, #3a2027, #170d12); }
+.section-title { -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #f3d590; }
+.section-hint { -fx-font-size: 11px; -fx-text-fill: #c7a58e; }
+.list-view { -fx-background-color: rgba(0,0,0,0.18); -fx-border-color: #70462f; -fx-border-radius: 7; -fx-background-radius: 7; }
+.list-cell { -fx-background-color: transparent; -fx-padding: 9 8 9 8; -fx-text-fill: #ead4bd; -fx-font-size: 12px; }
+.list-cell:filled:selected { -fx-background-color: #754231; -fx-text-fill: #fff4d5; }
+.main-button, .coin-button, .card-button { -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 7; }
+.main-button { -fx-background-color: linear-gradient(to bottom, #cc7046, #91442f); -fx-text-fill: white; }
+.coin-button { -fx-background-color: linear-gradient(to bottom, #f0ca5c, #c78d2d); -fx-text-fill: #38230d; }
+.cards { -fx-padding: 2; }
+.game-card { -fx-pref-width: 142; -fx-min-height: 138; -fx-padding: 11; -fx-background-color: linear-gradient(to bottom, #321c22, #241419); -fx-background-radius: 12; -fx-border-color: #956f43; -fx-border-radius: 12; -fx-border-width: 1; -fx-alignment: center; -fx-cursor: hand; }
+.game-card:hover { -fx-background-color: linear-gradient(to bottom, #43252a, #2e191e); -fx-effect: dropshadow(gaussian, rgba(237,178,72,0.35), 12, 0.25, 0, 0); }
+.selected-card { -fx-border-color: #f1c45d; -fx-border-width: 2; -fx-background-color: #48272a; }
+.card-icon { -fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #f2c95e; }
+.barkalov-lotto536 .card-icon { -fx-font-size: 18px; -fx-text-fill: #e46b56; }
+.larin-threerows .card-icon { -fx-font-size: 18px; -fx-text-fill: #2ecc71; }
+.korentsov-pixel .card-icon { -fx-text-fill: #65c3d2; }
+.varganov-bags .card-icon { -fx-text-fill: #d99944; }
+.card-title { -fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #fff0ce; -fx-text-alignment: center; }
+.card-detail { -fx-font-size: 9px; -fx-text-fill: #cdb39d; -fx-text-alignment: center; }
+.card-button { -fx-background-color: #b85d35; -fx-text-fill: white; -fx-font-size: 10px; }
+.card-button:hover { -fx-background-color: #de8245; }
+.status-bar { -fx-background-color: #170d12; -fx-border-color: #593323 transparent transparent transparent; -fx-border-width: 1 0 0 0; -fx-text-fill: #d8bfa8; -fx-font-size: 11px; }

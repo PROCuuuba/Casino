@@ -5,7 +5,7 @@ import org.example.casino.FxGameMachine;
 
 public final class PouchMachine extends FxGameMachine {
     public PouchMachine() {
-        super("putilin.pouches", "Казик — Путилин");
+        super("putilin.pouches", "Рулетка — Путилин");
     }
 
     @Override

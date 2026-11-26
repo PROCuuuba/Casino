@@ -6,7 +6,7 @@ import org.example.casino.FxGameMachine;
 
 public final class BagMachineAdapter extends FxGameMachine {
     public BagMachineAdapter() {
-        super("varganov.bags", "Мешочки — Варганов");
+        super("varganov.bags", "Сундуки — Варганов");
     }
 
     @Override

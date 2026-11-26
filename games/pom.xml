@@ -11,6 +11,7 @@
         <module>mogilevtsev</module>
         <module>putilin</module>
         <module>varganov</module>
+        <module>test-slot-machine</module>
     </modules>
     <dependencies>
         <dependency><groupId>org.example</groupId><artifactId>casino-api</artifactId></dependency>

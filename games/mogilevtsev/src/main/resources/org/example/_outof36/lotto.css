@@ -1,0 +1,246 @@
+.lotto-root {
+    -fx-background-color: linear-gradient(to bottom right, #233650, #111e31 55%, #0e1729);
+    -fx-padding: 24 26 26 26;
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-accent: #ffc573;
+    -fx-focus-color: #fbd19a;
+    -fx-faint-focus-color: transparent;
+}
+
+.lotto-root .label {
+    -fx-text-fill: #e8eff8;
+}
+
+.lotto-root .game-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 42px;
+    -fx-text-fill: #fff3de;
+}
+
+.lotto-root .stake-label,
+.lotto-root .game-status {
+    -fx-text-fill: #adc1d8;
+    -fx-font-size: 13px;
+}
+
+.balance-panel {
+    -fx-min-width: 124;
+    -fx-padding: 9 16 9 16;
+    -fx-background-color: #182638;
+    -fx-background-radius: 11;
+    -fx-border-radius: 11;
+    -fx-border-color: #3b5069;
+}
+
+.lotto-root .balance-caption {
+    -fx-text-fill: #b7c9dc;
+    -fx-font-size: 12px;
+}
+
+.lotto-root .balance-value {
+    -fx-text-fill: #fff3de;
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+}
+
+.panel {
+    -fx-background-color: #16243a;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-border-color: #334a65;
+    -fx-padding: 18 20 18 20;
+}
+
+.lotto-root .panel-title {
+    -fx-text-fill: #f7faff;
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+}
+
+.lotto-root .selection-count {
+    -fx-background-color: #2b3b50;
+    -fx-background-radius: 12;
+    -fx-padding: 4 10;
+    -fx-text-fill: #e3eaf3;
+    -fx-font-size: 12px;
+}
+
+.ticket-grid {
+    -fx-padding: 10;
+    -fx-background-color: #101d32;
+    -fx-background-radius: 12;
+}
+
+.number-button {
+    -fx-min-width: 41;
+    -fx-pref-width: 41;
+    -fx-max-width: 41;
+    -fx-min-height: 41;
+    -fx-pref-height: 41;
+    -fx-max-height: 41;
+    -fx-background-color: #2a4563;
+    -fx-background-radius: 50%;
+    -fx-border-color: #3b5e81;
+    -fx-border-radius: 50%;
+    -fx-padding: 0;
+    -fx-text-fill: #f0f5fb;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.number-button:hover {
+    -fx-background-color: #395b7c;
+}
+
+.number-button:disabled {
+    -fx-opacity: 0.73;
+}
+
+.number-button:selected {
+    -fx-background-color: #ffc573;
+    -fx-border-color: #ffe2ab;
+    -fx-text-fill: #221b10;
+    -fx-opacity: 1;
+}
+
+.number-button:match {
+    -fx-background-color: #83e5b3;
+    -fx-border-color: #b5f8d4;
+    -fx-text-fill: #112b21;
+    -fx-opacity: 1;
+}
+
+.secondary-button,
+.draw-button {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 7 13;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.secondary-button {
+    -fx-background-color: #233953;
+    -fx-border-color: #3e5c79;
+    -fx-text-fill: #f0f6fb;
+}
+
+.top-up-button {
+    -fx-border-color: #fff3de;
+    -fx-border-width: 2;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #304d6b;
+}
+
+.secondary-button:disabled {
+    -fx-background-color: #1c2f45;
+    -fx-border-color: #344d66;
+    -fx-text-fill: #9aafc4;
+    -fx-opacity: 1;
+}
+
+.draw-button {
+    -fx-min-height: 42;
+    -fx-background-color: #ffc573;
+    -fx-border-color: #ffda9f;
+    -fx-text-fill: #221b10;
+    -fx-font-size: 15px;
+}
+
+.draw-button:hover {
+    -fx-background-color: #ffdb9f;
+}
+
+.draw-button:disabled {
+    -fx-background-color: #31445b;
+    -fx-border-color: #465c74;
+    -fx-text-fill: #aebfd0;
+    -fx-opacity: 1;
+}
+
+.lotto-root .button:focused,
+.lotto-root .number-button:focused {
+    -fx-border-color: #fff3d9;
+    -fx-border-width: 2;
+}
+
+.drawn-balls {
+    -fx-padding: 13 8;
+    -fx-background-color: #101d32;
+    -fx-background-radius: 12;
+}
+
+.lotto-root .drawn-ball {
+    -fx-min-width: 48;
+    -fx-pref-width: 48;
+    -fx-min-height: 48;
+    -fx-pref-height: 48;
+    -fx-alignment: center;
+    -fx-background-color: #172840;
+    -fx-background-radius: 50%;
+    -fx-border-color: #35536e;
+    -fx-border-radius: 50%;
+    -fx-text-fill: #92a9be;
+    -fx-font-weight: bold;
+    -fx-font-size: 19px;
+}
+
+.lotto-root .drawn-ball:revealed {
+    -fx-background-color: #e0ebf6;
+    -fx-border-color: #f2f7fb;
+    -fx-text-fill: #172840;
+}
+
+.lotto-root .drawn-ball:match {
+    -fx-background-color: #83e5b3;
+    -fx-border-color: #b5f8d4;
+    -fx-text-fill: #112b21;
+}
+
+.lotto-root .ball-check {
+    -fx-min-width: 17;
+    -fx-min-height: 17;
+    -fx-alignment: center;
+    -fx-background-color: #16573d;
+    -fx-background-radius: 50%;
+    -fx-text-fill: #e0faeb;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
+
+.lotto-root .round-result {
+    -fx-padding: 14 12;
+    -fx-font-size: 15px;
+    -fx-background-color: #20344b;
+    -fx-background-radius: 8;
+    -fx-text-fill: #f2f7fc;
+    -fx-font-weight: bold;
+}
+
+.table-head {
+    -fx-background-color: #22354d;
+    -fx-background-radius: 7;
+    -fx-padding: 6 9;
+}
+
+.table-head .label {
+    -fx-text-fill: #bcd0e2;
+    -fx-font-size: 12px;
+}
+
+.prize-grid {
+    -fx-padding: 0 9 0 9;
+}
+
+.prize-grid .label {
+    -fx-padding: 5 0;
+}
+
+.lotto-root .prize-amount {
+    -fx-text-fill: #ffcf89;
+    -fx-font-weight: bold;
+}
