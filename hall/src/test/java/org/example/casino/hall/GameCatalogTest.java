@@ -11,10 +11,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameCatalogTest {
     @Test
-    void discoversExactlyOneOriginalGamePerBranch() {
+    void discoversAllIntegratedGames() {
         var machines = GameCatalog.discover().machines();
         var ids = machines.stream().map(GameMachine::id).collect(Collectors.toSet());
-        assertEquals(Set.of("barkalov.gamble", "barkalov.lotto536", "chernixa.ludka", "korentsov.pixel",
+        assertEquals(Set.of("barkalov.gamble", "barkalov.lotto536", "barkalov.orbita", "chernixa.ludka", "korentsov.pixel",
                 "larin.threerows", "putilin.pouches", "varganov.bags"),
                 ids.stream().filter(id -> !id.equals("test.probe")).collect(Collectors.toSet()));
         assertEquals(machines.size(), ids.size());

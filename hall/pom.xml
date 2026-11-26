@@ -13,6 +13,7 @@
         <dependency><groupId>org.example</groupId><artifactId>game-mogilevtsev</artifactId><version>${project.version}</version><scope>runtime</scope></dependency>
         <dependency><groupId>org.example</groupId><artifactId>game-putilin</artifactId><version>${project.version}</version><scope>runtime</scope></dependency>
         <dependency><groupId>org.example</groupId><artifactId>game-varganov</artifactId><version>${project.version}</version><scope>runtime</scope></dependency>
+        <dependency><groupId>org.example</groupId><artifactId>game-orbita</artifactId><version>${project.version}</version><scope>runtime</scope></dependency>
         <dependency><groupId>org.example</groupId><artifactId>game-test-probe</artifactId><version>${project.version}</version><scope>test</scope></dependency>
         <dependency><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter</artifactId><scope>test</scope></dependency>
     </dependencies>

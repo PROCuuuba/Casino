@@ -168,6 +168,45 @@ class HallWindowTest {
         });
     }
 
+    @Test
+    void playsOrbitaAndCarriesItsBalanceIntoAnotherGame() throws Exception {
+        withHall(hall -> {
+            BalanceManager balance = BalanceManager.getInstance();
+            play(hall, "barkalov.orbita", game -> {
+                Parent root = game.getScene().getRoot();
+                Button spin = (Button) root.lookup("#orbitaSpin");
+                Label displayedBalance = (Label) root.lookup("#orbitaBalance");
+                assertEquals("0", displayedBalance.getText());
+                assertTrue(spin.isDisabled());
+
+                button(root, "+1 монета").fire();
+                assertEquals(1, balance.getCoins());
+                assertFalse(spin.isDisabled());
+                spin.fire();
+
+                long distinctSymbols = Stream.of("#orbitaReel1", "#orbitaReel2", "#orbitaReel3")
+                        .map(id -> ((Label) root.lookup(id)).getText())
+                        .distinct()
+                        .count();
+                int payout = switch ((int) distinctSymbols) {
+                    case 1 -> 6;
+                    case 2 -> 1;
+                    default -> 0;
+                };
+                assertEquals(payout, balance.getCoins());
+                assertEquals(Integer.toString(payout), displayedBalance.getText());
+                button(root, "В каталог").fire();
+            });
+
+            play(hall, "larin.threerows", game -> {
+                Parent root = game.getScene().getRoot();
+                assertEquals("🪙 " + balance.getCoins(), ((Label) hall.getScene().lookup("#balance")).getText());
+                assertTrue(labels(root).contains("Общий баланс: " + balance.getCoins() + " монет"));
+                button(root, "В каталог").fire();
+            });
+        });
+    }
+
     private static GameMachine select(Stage hall, String id) {
         @SuppressWarnings("unchecked")
         var list = (ListView<GameMachine>) hall.getScene().lookup("#machines");
