@@ -9,7 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.util.Objects;
 
@@ -71,16 +70,10 @@ public abstract class FxGameMachine implements GameMachine {
         footer.setPadding(new Insets(8, 14, 8, 14));
         footer.setStyle("-fx-background-color: linear-gradient(to right, #35131a, #6d202b); -fx-border-color: #b27a32 transparent transparent transparent; -fx-border-width: 1;");
         BorderPane frame = new BorderPane();
-        scene.setRoot(frame);
         frame.setCenter(game);
         frame.setBottom(footer);
-        stage.addEventHandler(WindowEvent.WINDOW_SHOWN, event -> {
-            double height = footer.prefHeight(-1);
-            double originalHeight = stage.getHeight();
-            if (stage.getMinHeight() > 0) {
-                stage.setMinHeight(stage.getMinHeight() + height);
-            }
-            stage.setHeight(originalHeight + height);
-        });
+        Scene framedScene = new Scene(frame, scene.getWidth(), scene.getHeight() + footer.prefHeight(scene.getWidth()));
+        framedScene.getStylesheets().setAll(scene.getStylesheets());
+        stage.setScene(framedScene);
     }
 }
