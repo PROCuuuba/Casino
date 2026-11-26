@@ -1,0 +1,65 @@
+.orbita {
+    -fx-background-color: #121b2b;
+    -fx-padding: 22 26;
+}
+
+.orbita .label {
+    -fx-text-fill: #edf3fc;
+    -fx-font-size: 14px;
+}
+
+.orbita .game-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+}
+
+.orbita .balance-value {
+    -fx-text-fill: #9de8d0;
+    -fx-font-size: 23px;
+    -fx-font-weight: bold;
+}
+
+.orbita .muted {
+    -fx-text-fill: #adbacf;
+    -fx-font-size: 13px;
+}
+
+.orbita .reel {
+    -fx-alignment: center;
+    -fx-min-width: 108px;
+    -fx-min-height: 104px;
+    -fx-background-color: #1d2d46;
+    -fx-background-radius: 14px;
+    -fx-border-color: #3c5273;
+    -fx-border-radius: 14px;
+    -fx-font-size: 52px;
+    -fx-text-fill: #adbacf;
+}
+
+.orbita .planet { -fx-text-fill: #9bd1ff; }
+.orbita .ring { -fx-text-fill: #cfbaff; }
+.orbita .star { -fx-text-fill: #ffdb86; }
+.orbita .comet { -fx-text-fill: #9de8d0; }
+
+.orbita .result {
+    -fx-font-weight: bold;
+}
+
+.orbita .button {
+    -fx-background-color: #2b3d57;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-text-fill: #edf3fc;
+    -fx-padding: 9 15;
+    -fx-font-size: 14px;
+}
+
+.orbita .spin-button {
+    -fx-background-color: #9de8d0;
+    -fx-text-fill: #112b25;
+    -fx-font-weight: bold;
+}
+
+.orbita .button:focused {
+    -fx-border-color: #edf3fc;
+}
