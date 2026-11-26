@@ -87,7 +87,7 @@ public class GameApplication extends Application {
         root.setCenter(chestBox);
 
         updatePlayerInfo();
-        Scene scene = new Scene(root, 690, 420);
+        Scene scene = new Scene(root, 690, 490);
         ButtonSound.install(scene);
         stage.setScene(scene);
         stage.setResizable(false);

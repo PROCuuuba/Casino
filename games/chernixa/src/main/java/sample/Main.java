@@ -17,7 +17,7 @@ public class Main extends Application {
     void prepare(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/sample.fxml"));
         primaryStage.setTitle("Игровой автомат - Task 14");
-        primaryStage.setScene(new Scene(root, 700, 500));
+        primaryStage.setScene(new Scene(root, 700, 550));
     }
 
     public static void main(String[] args) {
