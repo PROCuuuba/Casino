@@ -67,6 +67,9 @@ public abstract class FxGameMachine implements GameMachine {
         footer.setLeft(hint);
         footer.setRight(back);
         BorderPane.setAlignment(back, Pos.CENTER_RIGHT);
+        footer.setMinHeight(48);
+        footer.setPrefHeight(48);
+        footer.setMaxHeight(48);
         footer.setPadding(new Insets(8, 14, 8, 14));
         footer.setStyle("-fx-background-color: linear-gradient(to right, #35131a, #6d202b); -fx-border-color: #b27a32 transparent transparent transparent; -fx-border-width: 1;");
         BorderPane frame = new BorderPane();
