@@ -40,8 +40,6 @@ class HallWindowTest {
                 new Play("barkalov.gamble", "Внести монету", "Монета внесена. Нажмите «Начать игру».", "Начать игру", "Выберите один из трёх мешочков."),
                 new Play("chernixa.ludka", "Кинуть монетку", "Монеток у игрока: 1", "Старт игры", "Игра идет..."),
                 new Play("korentsov.pixel", "Кинуть монетку (+1)", "Монеток: 1", "Начать игру", "Сыграно раундов: 1"),
-                new Play("larin.threebags", "🪙 Вставить монету", "Баланс: 1 монет | Ходов: 0", "▶ Начать игру", "Выберите одну из трех коробок!"),
-                new Play("mogilevtsev.reels", "Заправить монетку", "Игрок: на счете 1 монет, ставок сделано 0", "Начать игру", "Игрок: на счете 0 монет, ставок сделано 1"),
                 new Play("varganov.bags", "Добавить 1 монету", "Монеты: 1 | Сыграно попыток: 0", "Начать игру", "Выберите любой сундук.")
         );
     }
@@ -132,14 +130,41 @@ class HallWindowTest {
             });
             completed.get(2, TimeUnit.SECONDS);
             assertEquals("🪙 " + settled[0], ((Label) hall.getScene().lookup("#balance")).getText());
-            play(hall, "larin.threebags", game -> {
+            play(hall, "barkalov.gamble", game -> {
                 Parent root = game.getScene().getRoot();
-                assertTrue(labels(root).contains("Баланс: " + settled[0] + " монет | Ходов: 0"));
-                button(root, "▶ Начать игру").fire();
+                assertTrue(labels(root).contains(Integer.toString(settled[0])), labels(root).toString());
+                button(root, "Начать игру").fire();
                 assertEquals(settled[0] - 1, balance.getCoins());
                 button(root, "В каталог").fire();
             });
             assertEquals(settled[0] - 1, balance.getCoins());
+        });
+    }
+
+    @Test
+    void playsThreeInRowAndLottoWithSharedBalance() throws Exception {
+        withHall(hall -> {
+            BalanceManager balance = BalanceManager.getInstance();
+            balance.addCoins(5);
+            play(hall, "larin.threerows", game -> {
+                Parent root = game.getScene().getRoot();
+                assertTrue(labels(root).contains("Общий баланс: 5 монет"), labels(root).toString());
+                button(root, "Вращение (1 монета)").fire();
+                assertTrue(labels(root).contains("Вращений: 1"), labels(root).toString());
+                button(root, "В каталог").fire();
+            });
+            if (balance.getCoins() < 2) {
+                balance.addCoins(2);
+            }
+            int beforeDraw = balance.getCoins();
+            play(hall, "barkalov.lotto536", game -> {
+                Parent root = game.getScene().getRoot();
+                ((Button) root.lookup("#randomButton")).fire();
+                ((Button) root.lookup("#drawButton")).fire();
+                assertEquals(beforeDraw - 2, balance.getCoins());
+                button(root, "В каталог").fire();
+            });
+            assertTrue(balance.getCoins() >= beforeDraw - 2);
         });
     }
 

@@ -14,8 +14,8 @@ class GameCatalogTest {
     void discoversExactlyOneOriginalGamePerBranch() {
         var machines = GameCatalog.discover().machines();
         var ids = machines.stream().map(GameMachine::id).collect(Collectors.toSet());
-        assertEquals(Set.of("barkalov.gamble", "chernixa.ludka", "korentsov.pixel", "larin.threebags",
-                "mogilevtsev.reels", "putilin.pouches", "varganov.bags"),
+        assertEquals(Set.of("barkalov.gamble", "barkalov.lotto536", "chernixa.ludka", "korentsov.pixel",
+                "larin.threerows", "putilin.pouches", "varganov.bags"),
                 ids.stream().filter(id -> !id.equals("test.probe")).collect(Collectors.toSet()));
         assertEquals(machines.size(), ids.size());
         assertTrue(machines.stream().noneMatch(machine -> machine.title().isBlank()));

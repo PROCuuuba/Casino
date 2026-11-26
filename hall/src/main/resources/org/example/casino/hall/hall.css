@@ -23,7 +23,8 @@
 .game-card:hover { -fx-background-color: linear-gradient(to bottom, #43252a, #2e191e); -fx-effect: dropshadow(gaussian, rgba(237,178,72,0.35), 12, 0.25, 0, 0); }
 .selected-card { -fx-border-color: #f1c45d; -fx-border-width: 2; -fx-background-color: #48272a; }
 .card-icon { -fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #f2c95e; }
-.mogilevtsev-reels .card-icon { -fx-font-size: 18px; -fx-text-fill: #e46b56; }
+.barkalov-lotto536 .card-icon { -fx-font-size: 18px; -fx-text-fill: #e46b56; }
+.larin-threerows .card-icon { -fx-font-size: 18px; -fx-text-fill: #2ecc71; }
 .korentsov-pixel .card-icon { -fx-text-fill: #65c3d2; }
 .varganov-bags .card-icon { -fx-text-fill: #d99944; }
 .card-title { -fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #fff0ce; -fx-text-alignment: center; }

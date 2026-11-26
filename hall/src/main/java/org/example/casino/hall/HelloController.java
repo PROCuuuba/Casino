@@ -109,11 +109,12 @@ public class HelloController {
 
     private String description(GameMachine machine) {
         return switch (machine.id()) {
-            case "barkalov.gamble", "chernixa.ludka", "larin.threebags" -> "Испытайте удачу и выберите мешочек";
+            case "barkalov.gamble", "chernixa.ludka" -> "Испытайте удачу и выберите мешочек";
+            case "larin.threerows" -> "Соберите три одинаковых символа в ряд";
             case "putilin.pouches" -> "Ставки на цвет: красный и чёрный ×2, зелёный ×5";
             case "varganov.bags" -> "Откройте сундук и найдите награду";
             case "korentsov.pixel" -> "Пиксельный автомат с собственным стилем";
-            case "mogilevtsev.reels" -> "Классический автомат с барабанами";
+            case "barkalov.lotto536" -> "Лотерея 5 из 36: выберите 5 чисел и выиграйте приз";
             default -> "Игровой автомат участника команды";
         };
     }
@@ -123,8 +124,8 @@ public class HelloController {
             case "barkalov.gamble" -> "♠";
             case "chernixa.ludka" -> "♦";
             case "korentsov.pixel" -> "▣";
-            case "larin.threebags" -> "♣";
-            case "mogilevtsev.reels" -> "777";
+            case "larin.threerows" -> "777";
+            case "barkalov.lotto536" -> "5/36";
             case "putilin.pouches" -> "★";
             case "varganov.bags" -> "▰";
             default -> "?";

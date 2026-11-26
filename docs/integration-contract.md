@@ -23,8 +23,8 @@
 | `Barkalov` · `86058ed` | `GambleApplication.start(Stage)` | FXML, CSS, звук и анимации | `GambleMachine` загружает сцену и освобождает аудиоклипы при закрытии окна. |
 | `Chernixa` · `812a297` | `sample.Main.start(Stage)` | FXML и картинки монеты и мешочков | `LudkaMachine` загружает исходный экран. Ресурсы лежат рядом с пакетом `sample`. |
 | `Korentsov` · `6ec9cc1` | `SlotMachineApp.start(Stage)` | JavaFX из кода, пиксельный корпус с PNG | `PixelMachine` подготавливает исходную сцену. Окно закрывается стандартным способом. |
-| `Larin` · `c1af16b` | `ThreeBagsAdapter.start(Stage, Runnable)` | FXML и собственная команда возврата | Адаптер реализует общий контракт. Исходная команда возврата закрывает игровое окно. |
-| `Mogilevtsev` · `aef3a88` | `SlotMachineApp.start(Stage)` | FXML, CSS и изображения | `ReelsMachine` открывает сцену исходной игры. |
+| `Larin` · `531480d` | `ThreeInRowAdapter` | JavaFX из кода, «Три в ряд» | `ThreeInRowAdapter` (`larin.threerows`, заменил «Три мешочка») реализует `FxGameMachine` и работает с общим `BalanceManager`. |
+| `Mogilevtsev` · `d57a10c` | `LottoApplication.start(Stage)` | FXML и CSS, лотерея «5 из 36» | `LottoMachine` (`barkalov.lotto536`) открывает окно игры через `FxGameMachine` и общий `BalanceManager`. |
 | `Putilin` · `f5c6fa4`, рулетка · `ef2958b` | `ru.study.chain.Main.start(Stage)` | JavaFX из кода, колесо из девяти секторов | `PouchMachine` подготавливает рулетку в отдельном окне. Сохранён идентификатор `putilin.pouches`; баланс общий, выплата за зелёный ×5. |
 | `Varganov` · `7ab4593` | `BagMachineAdapter.launch()` | JavaFX из кода и графика сундуков | `BagMachineAdapter` передаёт подготовку окна исходному `GameApplication`. Дополнительная «Монета» доступна в исходной ветке. |
 
